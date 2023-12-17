@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, IconButton } from '@mui/material';
@@ -20,6 +20,7 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
   });
   const [openDialog, setOpenDialog] = useState(false);
   const [tempEntries, setTempEntries] = useState(entries); 
+  const inputRef = useRef(null);
   const handleDialogOpen = () => {
     
     setTempEntries([...entries]); 
@@ -50,6 +51,13 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
   };
 
   const commitDataToChart = () => {
+    for (let i = 0; i < tempEntries.length; i++) {
+      if (tempEntries[i].percentage=='' || totalAmount=='') {
+          alert("Your input contain invalid number, please check")
+          inputRef.current.focus(); // Focus on the input field after the alert
+          return;
+      }
+  }
     let currentTotal = tempEntries.reduce((acc, entry) => acc + Number(entry.percentage), 0);
 
     if (currentTotal > 100) {
@@ -134,6 +142,7 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
                 fullWidth
                 value={entry.percentage}
                 onChange={(e) => handleTempEntryChange(index, 'percentage', e.target.value)}
+                
               />
               <div>
                 <IconButton onClick={addNewTempEntry}>
@@ -148,7 +157,7 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={commitDataToChart}>Commit</Button>
+          <Button onClick={commitDataToChart} ref={inputRef}>Commit</Button>
         </DialogActions>
       </Dialog>
     </div>

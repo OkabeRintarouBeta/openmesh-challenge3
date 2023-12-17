@@ -68,7 +68,15 @@ const LineChart = ({ data,totalAmount,entries }) => {
             pointRadius:0
         };
     });
-
+    newPieChartData.push({
+      label: 'total user input',
+      data: new Array(filteredData.length).fill(totalAmount), 
+      borderColor: color_list[entries.length],
+      tension: 0.1,
+      yAxisID: 'y',
+      borderWidth: 1.5,
+      pointRadius:0
+    })
     setPieChartData(newPieChartData);
   }, [entries, totalAmount, filteredData.length]);
   
