@@ -1,49 +1,56 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import 'chartjs-plugin-datalabels';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-const color_list = ['#E57373', '#64B5F6', '#81C784', '#FFF176', '#FFB74D', '#BA68C8', '#4DD0E1', '#F06292', '#AED581', '#F48FB1']
+const color_list = ['#E57373', '#64B5F6', '#81C784', '#FFF176', '#FFB74D', '#BA68C8', '#4DD0E1', '#F06292', '#AED581', '#F48FB1'];
 
-
-
-const PieChart = () => {
-  const initialChartData = {
+const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
+  const [chartData, setChartData] = useState({
     labels: ['Others'],
     datasets: [{
       data: [100],
       backgroundColor: [color_list[0]],
       hoverBackgroundColor: [color_list[0]]
     }]
-  };
-
-  const [chartData, setChartData] = useState(initialChartData);
-  const [entries, setEntries] = useState([{ name: '', percentage: '' }]);
+  });
   const [openDialog, setOpenDialog] = useState(false);
-
+  const [tempEntries, setTempEntries] = useState(entries); 
   const handleDialogOpen = () => {
+    
+    setTempEntries([...entries]); 
     setOpenDialog(true);
   };
 
   const handleDialogClose = () => {
     setOpenDialog(false);
-    setEntries([{ name: '', percentage: '' }]);
   };
 
-  const handleEntryChange = (index, type, value) => {
-    const newEntries = [...entries];
-    newEntries[index][type] = value;
-    setEntries(newEntries);
+  const handleTempEntryChange = (index, type, value) => {
+    
+    const newTempEntries = [...tempEntries];
+    
+    newTempEntries[index][type] = value;
+    
+    setTempEntries(newTempEntries);
+  };
+    
+
+  const addNewTempEntry = () => {
+    setTempEntries([...tempEntries, { name: '', percentage: '' }]);
   };
 
-  const addNewEntry = () => {
-    setEntries([...entries, { name: '', percentage: '' }]);
+  const deleteTempEntry = (index) => {
+    const newTempEntries = tempEntries.filter((_, idx) => idx !== index);
+    setTempEntries(newTempEntries);
   };
 
   const commitDataToChart = () => {
-    let currentTotal = entries.reduce((acc, entry) => acc + Number(entry.percentage), 0);
+    let currentTotal = tempEntries.reduce((acc, entry) => acc + Number(entry.percentage), 0);
 
     if (currentTotal > 100) {
       alert('Total percentage exceeds 100%. Please adjust the values.');
@@ -51,11 +58,11 @@ const PieChart = () => {
     }
 
     const newChartData = {
-      labels: entries.map(entry => entry.name),
+      labels: tempEntries.map(entry => entry.name),
       datasets: [{
-        data: entries.map(entry => entry.percentage),
-        backgroundColor: entries.map((_,idx) => color_list[idx]),
-        hoverBackgroundColor: entries.map((_,idx) => color_list[idx])
+        data: tempEntries.map(entry => entry.percentage),
+        backgroundColor: tempEntries.map((_, idx) => color_list[idx]),
+        hoverBackgroundColor: tempEntries.map((_, idx) => color_list[idx])
       }]
     };
 
@@ -63,24 +70,54 @@ const PieChart = () => {
     if (othersPercentage > 0) {
       newChartData.labels.push('Others');
       newChartData.datasets[0].data.push(othersPercentage);
-      newChartData.datasets[0].backgroundColor.push(color_list[currentTotal-1]);
-      newChartData.datasets[0].hoverBackgroundColor.push(color_list[currentTotal-1]);
+      newChartData.datasets[0].backgroundColor.push(color_list[currentTotal - 1]);
+      newChartData.datasets[0].hoverBackgroundColor.push(color_list[currentTotal - 1]);
     }
 
     setChartData(newChartData);
+    setEntries(tempEntries); // Update the main entries state
     handleDialogClose();
   };
 
-  
+  const options = {
+    plugins: {
+      datalabels: {
+        color: '#100000',
+        formatter: (value, context) => {
+            const total = context.chart.data.datasets[0].data.reduce((sum, val) => sum + val, 0);
+            const percentage = value;
+            return `${value * totalAmount / 100} (${percentage}%)`;
+        }
+      },
+      tooltip: {
+        callbacks: {
+            label: function(context) {
+                const label = context.label || '';
+                const value = context.raw;
+                const percentage = value;
+                return `${value * totalAmount / 100} (${percentage}%)`;
+            },
+        }
+      }
+    }
+  };
 
   return (
     <div>
-      <Pie data={chartData} />
+      <Pie data={chartData} options={options}/>
       <Button variant="outlined" onClick={handleDialogOpen}>Add Data</Button>
       <Dialog open={openDialog} onClose={handleDialogClose}>
         <DialogTitle>Add Chart Data</DialogTitle>
         <DialogContent>
-          {entries.map((entry, index) => (
+          <TextField
+            margin="dense"
+            label="Total Amount"
+            type="number"
+            fullWidth
+            value={totalAmount}
+            onChange={(e) => setTotalAmount(e.target.value)}
+          />
+          {tempEntries.map((entry, index) => (
             <div key={index}>
               <TextField
                 margin="dense"
@@ -88,7 +125,7 @@ const PieChart = () => {
                 type="text"
                 fullWidth
                 value={entry.name}
-                onChange={(e) => handleEntryChange(index, 'name', e.target.value)}
+                onChange={(e) => handleTempEntryChange(index, 'name', e.target.value)}
               />
               <TextField
                 margin="dense"
@@ -96,13 +133,16 @@ const PieChart = () => {
                 type="number"
                 fullWidth
                 value={entry.percentage}
-                onChange={(e) => handleEntryChange(index, 'percentage', e.target.value)}
+                onChange={(e) => handleTempEntryChange(index, 'percentage', e.target.value)}
               />
-              {index === entries.length - 1 && (
-                <IconButton onClick={addNewEntry}>
+              <div>
+                <IconButton onClick={addNewTempEntry}>
                   <AddIcon />
                 </IconButton>
-              )}
+                <IconButton onClick={() => deleteTempEntry(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </div>
             </div>
           ))}
         </DialogContent>
