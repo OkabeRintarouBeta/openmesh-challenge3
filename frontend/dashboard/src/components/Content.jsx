@@ -19,11 +19,11 @@ const Content = () =>{
         return resp;
       })
       .then(historical_data => {
-        let dataList = Object.keys(historical_data).map(key => {
+        let dataList = historical_data.map(record => {
           return {
-              date: historical_data[key].date,
-              y: historical_data[key].total_eth_supply,
-              price:historical_data[key].price
+              date: record.date,
+              y: record.total_eth_supply,
+              price:record.price
           };
       });
         setData(dataList);

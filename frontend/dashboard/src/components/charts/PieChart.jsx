@@ -1,7 +1,7 @@
 import { useState,useRef } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, IconButton } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, IconButton, ButtonBase } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import 'chartjs-plugin-datalabels';
@@ -32,14 +32,16 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
   };
 
   const handleTempEntryChange = (index, type, value) => {
-    
     const newTempEntries = [...tempEntries];
-    
     newTempEntries[index][type] = value;
-    
     setTempEntries(newTempEntries);
   };
-    
+  
+  const clearAllEntries = () => {
+    // Reset to only the first entry or an empty entry if no entries exist
+    setTempEntries([{ name: '', percentage: '' }]);
+    setTotalAmount(0);
+  };
 
   const addNewTempEntry = () => {
     setTempEntries([...tempEntries, { name: '', percentage: '' }]);
@@ -64,7 +66,7 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
       alert('Total percentage exceeds 100%. Please adjust the values.');
       return;
     }
-
+    
     const newChartData = {
       labels: tempEntries.map(entry => entry.name),
       datasets: [{
@@ -73,8 +75,9 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
         hoverBackgroundColor: tempEntries.map((_, idx) => color_list[idx])
       }]
     };
-
+    
     const othersPercentage = 100 - currentTotal;
+    
     if (othersPercentage > 0) {
       newChartData.labels.push('Others');
       newChartData.datasets[0].data.push(othersPercentage);
@@ -83,7 +86,7 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
     }
 
     setChartData(newChartData);
-    setEntries(tempEntries); // Update the main entries state
+    setEntries(tempEntries); 
     handleDialogClose();
   };
 
@@ -116,6 +119,7 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
       <Button variant="outlined" onClick={handleDialogOpen}>Add Data</Button>
       <Dialog open={openDialog} onClose={handleDialogClose}>
         <DialogTitle>Add Chart Data</DialogTitle>
+        <Button onClick={clearAllEntries}>Clear All</Button>
         <DialogContent>
           <TextField
             margin="dense"
@@ -145,15 +149,15 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
                 
               />
               <div>
-                <IconButton onClick={addNewTempEntry}>
-                  <AddIcon />
-                </IconButton>
                 <IconButton onClick={() => deleteTempEntry(index)}>
                   <DeleteIcon />
                 </IconButton>
               </div>
             </div>
           ))}
+          <IconButton onClick={addNewTempEntry}>
+            <AddIcon />
+          </IconButton>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>

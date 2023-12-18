@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { FormControl, Select, MenuItem, InputLabel } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
@@ -21,28 +22,27 @@ const LineChart = ({ data,totalAmount,entries }) => {
 
   const [pieChartData, setPieChartData] = useState([]);
   const [lineWidth,setLineWidth]=useState(3);
-  
+  const [showPrice, setShowPrice]=useState(true);
 
+  const maxDateTimestamp = Math.max(...data.map(item => new Date(item.date).getTime()));
+  const maxDate = new Date(maxDateTimestamp);
 
   useEffect(() => {
     const filterData = (data, range) => {
-      const maxDateTimestamp = Math.max(...data.map(item => new Date(item.date).getTime()));
-      const maxDate = new Date(maxDateTimestamp);
-      console.log(dateRangeValue)
+      // const maxDateTimestamp = Math.max(...data.map(item => new Date(item.date).getTime()));
+      // const maxDate = new Date(maxDateTimestamp);
+      
       const filtered = data.filter(item => {
         const itemDate = new Date(item.date);
-        console.log(range)
         if (range === 'week') {
           return (maxDate - itemDate) / (1000 * 60 * 60 * 24) <= 7;
         } else if (range === 'month') {
           return maxDate.getMonth() === itemDate.getMonth() && maxDate.getFullYear() === itemDate.getFullYear();
         } else if (range === 'year') {
-          console.log("year-----")
           const oneYearBefore = new Date(maxDate.getFullYear() - 1, maxDate.getMonth(), maxDate.getDate());
           return itemDate >= oneYearBefore && itemDate <= maxDate;
         }else if (range === 'custom' && dateRangeValue[0] && dateRangeValue[1]){
-          console.log(dateRange)
-          return itemDate >= dateRangeValue[0] && itemDate <= dateRangeValue[1];
+          return itemDate >= dateRangeValue[0] && itemDate <= dateRangeValue[1] && itemDate<=maxDate;
         }else{
           setLineWidth(1)
           return true;
@@ -55,7 +55,7 @@ const LineChart = ({ data,totalAmount,entries }) => {
 
   useEffect(() => {
     let base = 0;
-    const newPieChartData = entries.map((entry, idx) => {
+    const newPieChartData = entries.length>0&& entries[0].name!="" ? entries.map((entry, idx) => {
         const entryValue = entry.percentage * totalAmount / 100;
         base += entryValue; // Accumulate the value
         return {
@@ -67,7 +67,7 @@ const LineChart = ({ data,totalAmount,entries }) => {
             borderWidth: 1.5,
             pointRadius:0
         };
-    });
+    }):[];
     newPieChartData.push({
       label: 'total user input',
       data: new Array(filteredData.length).fill(totalAmount), 
@@ -77,9 +77,14 @@ const LineChart = ({ data,totalAmount,entries }) => {
       borderWidth: 1.5,
       pointRadius:0
     })
+    
     setPieChartData(newPieChartData);
   }, [entries, totalAmount, filteredData.length]);
   
+  const handleShowPriceChange = (event) => {
+    setShowPrice(event.target.checked);
+  };
+
   const handleDateRangeChange = (item) => {
     console.log(item)
     setDateRangeValue(item);
@@ -96,18 +101,18 @@ const LineChart = ({ data,totalAmount,entries }) => {
       tension: 0.1,
       yAxisID:'y',
       borderWidth: lineWidth
-    },{
+    },
+    ...showPrice?[{
       label: 'Price',
       data: filteredData.map(d => d.price),
       borderColor: 'rgb(0, 192, 50)',
       tension: 0.1,
       yAxisID:'y1',
       borderWidth: lineWidth
-    },
+    }]:[],
     ...pieChartData
   ]
   };
-
 
   const options = {
     scales: {
@@ -117,11 +122,11 @@ const LineChart = ({ data,totalAmount,entries }) => {
         position: 'left',
         title: {
           display: true,
-          text: 'Total Ethereum Supply', // Replace with your actual title
-          color: '#666', // Optional: color of the title
+          text: 'Total Ethereum Supply',
+          color: '#666',
           font: {
-              size: 14, // Optional: font size of the title
-              family: 'Helvetica', // Optional: font family of the title
+              size: 14,
+              family: 'Helvetica', 
           }
         }
       },
@@ -183,14 +188,23 @@ const LineChart = ({ data,totalAmount,entries }) => {
           <MenuItem value="custom">Custom</MenuItem>
         </Select>
       </FormControl>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        {dateRange === 'custom' && (
+            <div>
+              <DateRangePicker 
+                onChange={handleDateRangeChange} 
+                value={dateRangeValue} 
+                maxDate={maxDate}
+                />
+            </div>
+        )}
+      </LocalizationProvider> 
       
-      {dateRange === 'custom' && (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <div>
-            <DateRangePicker onChange={handleDateRangeChange} value={dateRangeValue} />
-          </div>
-        </LocalizationProvider>
-      )}
+      <Checkbox
+        checked={showPrice}
+        onChange={handleShowPriceChange}
+        inputProps={{ 'aria-label': 'controlled' }}
+      /> Show Price
       <Line data={chartData} options={options}/>
     </div>
   );

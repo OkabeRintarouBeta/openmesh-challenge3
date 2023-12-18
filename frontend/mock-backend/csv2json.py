@@ -23,10 +23,9 @@ def csv2json(csv_dir1, csv_dir2,json_file):
     merged_df.fillna(0,inplace=True)
 
     data_list = merged_df.to_dict(orient='records')
-    formatted_data = {idx: data for idx, data in enumerate(data_list)}
-
+    data_list=list(data_list)[:-1] #do not include last day where eth=0
     with open(json_file, 'w') as file:
-        json.dump(formatted_data, file, indent=4)
+        json.dump(data_list, file, indent=4)
 
 if __name__ == '__main__':
     csv_dir = '../../Historial_supply_data.csv'
