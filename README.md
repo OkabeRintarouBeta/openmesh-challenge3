@@ -35,7 +35,7 @@ Looking ahead, we had envisioned expanding our application to include a diverse 
   - **Chart.js and React-Chartjs-2**: For data visualization (line and pie charts).
   - **Material-UI**: For styling and layout components.
 - **Backend**:
-  - Please refer to our backend repo here.
+  - Please refer to our backend repo [here](https://github.com/OkabeRintarouBeta/openmesh-challege3-backend) for more info.
 
 
 ## Setup and Installation
