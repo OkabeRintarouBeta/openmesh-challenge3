@@ -65,6 +65,33 @@ Looking ahead, we had envisioned expanding our application to include a diverse 
 - **User Interaction**: Capability for users to customize data views and inputs.
 
 
+Certainly! Adding a "Known Bugs" section to your README is a great way to inform other developers about any issues they might encounter and how to resolve them. Here's how you can incorporate this section:
+
+
+# Known Bugs and Fixes
+
+While we strive to maintain the highest quality in our application, there are a few known issues that developers might encounter. Below is a list of these known bugs and their respective solutions:
+
+## Not Found Error for `@mui/x-date-pickers`
+
+**Issue Description**:
+Some developers have reported encountering a "Not Found" error when cloning the repository to a local server and running `npm install`. This issue specifically relates to the `@mui/x-date-pickers` package.
+
+**Steps to Reproduce**:
+1. Clone the repository.
+2. Run `npm install` in the project directory.
+3. Observe potential "Not Found" error related to `@mui/x-date-pickers`.
+
+**Solution**:
+If you encounter this issue, manually install the `@mui/x-date-pickers` package by running the following command in your project directory:
+
+```
+npm install @mui/x-date-pickers
+```
+
+This should resolve the error and allow you to proceed with the setup and usage of the application.
+
+
 ## Contributing
 
 We welcome contributions to this project! Please refer to our contributing guidelines for more information on how to participate.
