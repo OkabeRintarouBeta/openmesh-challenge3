@@ -116,14 +116,14 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
   return (
     <div>
       <Pie data={chartData} options={options}/>
-      <Button variant="outlined" onClick={handleDialogOpen}>Add Data</Button>
+      <br/>
+      <Button variant="outlined" onClick={handleDialogOpen}>Build Chart</Button>
       <Dialog open={openDialog} onClose={handleDialogClose}>
-        <DialogTitle>Add Chart Data</DialogTitle>
-        <Button onClick={clearAllEntries}>Clear All</Button>
+        <DialogTitle>Token Supply Distribution Form</DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"
-            label="Total Amount"
+            label="Initial Supply"
             type="number"
             fullWidth
             value={totalAmount}
@@ -133,7 +133,7 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
             <div key={index}>
               <TextField
                 margin="dense"
-                label="Name"
+                label="Group"
                 type="text"
                 fullWidth
                 value={entry.name}
@@ -160,8 +160,9 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
           </IconButton>
         </DialogContent>
         <DialogActions>
+          <Button onClick={clearAllEntries}>Reset</Button>
           <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={commitDataToChart} ref={inputRef}>Commit</Button>
+          <Button onClick={commitDataToChart} ref={inputRef}>Submit</Button>
         </DialogActions>
       </Dialog>
     </div>
