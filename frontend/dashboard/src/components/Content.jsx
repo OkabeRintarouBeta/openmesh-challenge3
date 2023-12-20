@@ -22,7 +22,7 @@ const Content = () =>{
         let dataList = historical_data.map(record => {
           return {
               date: record.date,
-              y: record.total_eth_supply,
+              token_supply: record.total_eth_supply,
               price:record.price
           };
       });
