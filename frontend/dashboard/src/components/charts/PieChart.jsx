@@ -40,7 +40,7 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
   const clearAllEntries = () => {
     // Reset to only the first entry or an empty entry if no entries exist
     setTempEntries([{ name: '', percentage: '' }]);
-    setTotalAmount(0);
+    setTotalAmount(0); 
   };
 
   const addNewTempEntry = () => {

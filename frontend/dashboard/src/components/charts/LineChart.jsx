@@ -96,7 +96,7 @@ const LineChart = ({ data,totalAmount,entries }) => {
     labels: filteredData.map(d => d.date),
     datasets: [{
       label: 'ETH Supply',
-      data: filteredData.map(d => d.y),
+      data: filteredData.map(d => d.supply),
       borderColor: 'rgb(75, 192, 192)',
       tension: 0.1,
       yAxisID:'y',
