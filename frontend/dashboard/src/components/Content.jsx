@@ -4,6 +4,8 @@ import LineChart from './charts/LineChart';
 import PieChart from './charts/PieChart';
 import Tutorial from './Tutorial';
 
+import styles from './Content.module.css';
+
 const Content = () =>{
   const [data,setData]=useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -37,7 +39,7 @@ const Content = () =>{
     <div style={{ flexGrow: 1 }}>
       <Tutorial />
       <h2>Main Content</h2>
-      <div style={{display:'flex',justifyContent:'center',gap:'10%'}}>
+      <div className={styles.charts}>
         <PieChart totalAmount={totalAmount} setTotalAmount={setTotalAmount} entries={entries} setEntries={setEntries} />
         <LineChart data={data} totalAmount={totalAmount} entries={entries}/>;
       </div>

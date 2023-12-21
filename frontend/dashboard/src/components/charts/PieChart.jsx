@@ -6,6 +6,8 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import 'chartjs-plugin-datalabels';
 
+import styles from './PieChart.module.css';
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 const color_list = ['#E57373', '#64B5F6', '#81C784', '#FFF176', '#FFB74D', '#BA68C8', '#4DD0E1', '#F06292', '#AED581', '#F48FB1'];
 
@@ -114,7 +116,7 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
   };
 
   return (
-    <div>
+    <div className={styles.pieChart}>
       <Pie data={chartData} options={options}/>
       <br/>
       <Button variant="outlined" onClick={handleDialogOpen}>Build Chart</Button>

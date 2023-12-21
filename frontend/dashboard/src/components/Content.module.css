@@ -1,0 +1,13 @@
+.charts {
+    display: flex;
+    justify-content: center;
+    gap: 10%;
+}
+
+@media (max-width: 1000px) {
+    .charts {
+        flex-direction: column;
+        align-items: center;
+        gap: 80px;
+    }
+}

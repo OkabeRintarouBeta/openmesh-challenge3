@@ -9,6 +9,8 @@ import DateRangePicker from '@wojtekmaj/react-daterange-picker'
 import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
 import 'react-calendar/dist/Calendar.css';
 
+import styles from './LineChart.module.css';
+
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -171,9 +173,9 @@ const LineChart = ({ data,totalAmount,entries }) => {
   };
 
   return (
-    <div style={{width:"50%"}}>
-      <FormControl fullWidth>
-        <InputLabel id="date-range-label">Date Range</InputLabel>
+    <div className={styles.lineChart}>
+      <FormControl fullWidth className={styles.dateRangeWrapper}>
+        <InputLabel className={styles.dateRange} id="date-range-label">Date Range</InputLabel>
         <Select
           labelId="date-range-label"
           id="date-range-select"
