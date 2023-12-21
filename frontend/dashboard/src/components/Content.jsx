@@ -11,7 +11,7 @@ const Content = () =>{
   const [entries, setEntries] = useState([{ name: '', percentage: '' }]);
 
   useEffect(() => {
-    fetch('http://openmeshfizzylogicbackend-env.eba-pkzpq5i2.ap-southeast-2.elasticbeanstalk.com/')
+    fetch('https://openmeshfizzylogicbackend-env.eba-pkzpq5i2.ap-southeast-2.elasticbeanstalk.com/ ')
       .then(response => {
         if (!response.ok) {
           throw new Error(`ERROR: ${response.status}`);
