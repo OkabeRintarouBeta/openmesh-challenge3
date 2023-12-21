@@ -92,6 +92,13 @@ npm install @mui/x-date-pickers
 This should resolve the error and allow you to proceed with the setup and usage of the application.
 
 
+## Troubleshooting Missing Live Data
+
+If the live data feed is not appearing in the graph, there's a quick fix to resolve this issue. Please visit our data API URL: https://openmeshfizzylogicbackend-env.eba-pkzpq5i2.ap-southeast-2.elasticbeanstalk.com/.
+
+Since our API uses a self-signed certificate, your browser might display a security warning. Please proceed to the URL regardless of this warning. After visiting the API URL, return to the web application, and the live data should now be visible.
+
+
 ## Contributing
 
 We welcome contributions to this project! Please refer to our contributing guidelines for more information on how to participate.
