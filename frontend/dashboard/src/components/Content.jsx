@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import LineChart from './charts/LineChart';
 import PieChart from './charts/PieChart';
-
+import Tutorial from './Tutorial';
 
 const Content = () =>{
   const [data,setData]=useState([]);
@@ -35,6 +35,7 @@ const Content = () =>{
 
   return (
     <div style={{ flexGrow: 1 }}>
+      <Tutorial />
       <h2>Main Content</h2>
       <div style={{display:'flex',justifyContent:'center',gap:'10%'}}>
         <PieChart totalAmount={totalAmount} setTotalAmount={setTotalAmount} entries={entries} setEntries={setEntries} />
