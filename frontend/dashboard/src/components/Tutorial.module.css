@@ -1,0 +1,54 @@
+.wizard {
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .step {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .step h3 {
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .step p, .step ol {
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  .step ol {
+    margin-left: 20px;
+  }
+  
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .navigation button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  
+  .navigation button:hover {
+    background-color: #0056b3;
+  }
+  
+  .navigation button:disabled {
+    background-color: #cccccc;
+    cursor: default;
+  }
+  
