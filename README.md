@@ -68,11 +68,11 @@ Looking ahead, we had envisioned expanding our application to include a diverse 
 Certainly! Adding a "Known Bugs" section to your README is a great way to inform other developers about any issues they might encounter and how to resolve them. Here's how you can incorporate this section:
 
 
-# Known Bugs and Fixes
+## Known Bugs and Fixes
 
 While we strive to maintain the highest quality in our application, there are a few known issues that developers might encounter. Below is a list of these known bugs and their respective solutions:
 
-## Not Found Error for `@mui/x-date-pickers`
+### 1. Not Found Error for `@mui/x-date-pickers`
 
 **Issue Description**:
 Some developers have reported encountering a "Not Found" error when cloning the repository to a local server and running `npm install`. This issue specifically relates to the `@mui/x-date-pickers` package.
@@ -92,7 +92,7 @@ npm install @mui/x-date-pickers
 This should resolve the error and allow you to proceed with the setup and usage of the application.
 
 
-## Troubleshooting Missing Live Data
+### 2. Troubleshooting Missing Live Data
 
 If the live data feed is not appearing in the graph, there's a quick fix to resolve this issue. Please visit our data API [URL:](https://openmeshfizzylogicbackend-env.eba-pkzpq5i2.ap-southeast-2.elasticbeanstalk.com/).
 
