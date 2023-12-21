@@ -114,7 +114,7 @@ const PieChart = ({ totalAmount, setTotalAmount, entries, setEntries}) => {
   };
 
   return (
-    <div className={styles.pieChart}>
+    <div>
       <Pie data={chartData} options={options}/>
       <br/>
       <Button variant="outlined" onClick={handleDialogOpen}>Build Chart</Button>
